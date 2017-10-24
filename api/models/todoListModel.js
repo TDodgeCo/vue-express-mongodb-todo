@@ -4,9 +4,13 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 var TaskSchema = new Schema({
-    name: {
+    title: {
         type: String,
         required: 'Please enter the name of the task'
+    },
+    description: {
+        type: String,
+        required: 'Please enter a description of the task'
     },
     created_date: {
         type: Date,
