@@ -1,0 +1,23 @@
+{
+  "name": "todo-express-mvc-api",
+  "version": "1.0.0",
+  "description": "Todo app using express, mongodb and MVC architecture for the API and Vuejs for frontend. ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "RESTful",
+    "API",
+    "Express",
+    "MongoDB",
+    "VueJs"
+  ],
+  "author": "Tim Dodge",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "mongoose": "^4.12.4"
+  }
+}
