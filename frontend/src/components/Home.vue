@@ -1,56 +1,98 @@
 <template>
-  <v-tabs dark fixed centered>
-    <v-toolbar color="cyan">
-      <v-text-field
-        solo
-        label="Search"
-        append-icon="keyboard_voice"
-        prepend-icon="search"
-      ></v-text-field>
-      <v-tabs-bar class="cyan" slot="extension">
-        <v-tabs-slider color="yellow"></v-tabs-slider>
-        <v-tabs-item
-          v-for="i in 3"
-          :key="i"
-          :href="'#tab-' + i"
-        >
-          Item {{ i }}
-        </v-tabs-item>
-      </v-tabs-bar>
-    </v-toolbar>
-    <v-tabs-items>
-      <v-tabs-content
-        v-for="i in 3"
-        :key="i"
-        :id="'tab-' + i"
-      >
-        <v-card flat>
-          <v-card-text>{{ text }}</v-card-text>
-        </v-card>
-      </v-tabs-content>
-    </v-tabs-items>
-  </v-tabs>
+  <v-data-table
+      v-bind:headers="headers"
+      :items="tasks"
+      hide-actions
+      class="elevation-1"
+    >
+    <template slot="items" scope="props">
+      <td>{{ props.item.title }}</td>
+      <td class="text-xs-left">{{ props.item.description }}</td>
+      <td class="text-xs-left">{{ props.item.status[0] }}</td>
+      <td class="text-xs-left">
+        <v-icon class="point"
+        @click="theIndex = props.indexOf; logger()"
+        >create</v-icon>
+        <v-icon class="point"
+        @click ="taskId = props.item._id; completeTask()"
+        >done</v-icon>
+        <v-icon class="point"
+        @click="taskId = props.item._id; deleteTask()"
+        >delete</v-icon>
+      </td>
+    </template>
+  </v-data-table>
 </template>
 
 <script>
-  import axios from 'axios'
-  export default {
-    data () {
-      return {
-        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-        tabs: ['Pending', 'Ongoing', 'Completed'],
-        tabsContent: {}
-      }
+import axios from 'axios'
+
+export default {
+  name: 'home',
+  data () {
+    return {
+      headers: [
+        {
+          text: 'Title',
+          align: 'left',
+          sortable: false,
+          value: 'title'
+        },
+        {
+          text: 'Description',
+          value: 'description',
+          align: 'left'
+        },
+        {
+          text: 'Status',
+          value: 'status',
+          align: 'left'
+        },
+        {
+          text: 'Update',
+          value: 'status',
+          align: 'left'
+        }
+      ],
+      tasks: [],
+      taskId: '',
+      theIndex: ''
+    }
+  },
+  mounted () {
+    this.getTasks()
+  },
+  methods: {
+    getTasks: function () {
+      axios.get('/api/tasks').then(response => {
+        this.tasks = response.data
+      })
     },
-    methods: {
-      getTodos: function () {
-        axios.get('/api/tasks').then(response => {
-          this.tabsContent = response.data
-        })
-      }
+    deleteTask: function () {
+      axios.delete('/api/tasks/' + this.taskId).then(response => {
+        this.taskId = response.data.message
+      })
     },
-    mounted () {
-      this.getTodos()
+    completeTask: function () {
+      axios({
+        method: 'put',
+        url: '/api/tasks/' + this.taskId,
+        data: {
+          status: 'completed'
+        }
+      }).then(response => {
+        this.taskId.$set = response.data.message
+      })
+    },
+    logger: function () {
+      console.log(this.theIndex)
     }
   }
+}
 </script>
+
+<style scoped>
+  .point {
+    cursor: pointer;
+  }
+</style>
