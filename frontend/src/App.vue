@@ -27,6 +27,17 @@
     </v-navigation-drawer>
     <v-toolbar color="indigo" dark fixed app>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+          <v-btn
+            fab
+            small
+            color="cyan accent-2"
+            bottom
+            right
+            absolute
+            @click.native.stop="dialog = !dialog"
+          >
+            <v-icon>add</v-icon>
+          </v-btn>
       <v-toolbar-title>Application</v-toolbar-title>
     </v-toolbar>
     <main>
@@ -36,20 +47,26 @@
             justify-center
           >
             <router-view></router-view>
+              <new-todo :dialog="dialog"></new-todo>
           </v-layout>
         </v-container>
       </v-content>
     </main>
     <v-footer color="indigo" app>
-      <span class="white--text">&copy; 2017</span>
+      <span class="white--text">&copy; Tim Dodge 2017</span>
     </v-footer>
   </v-app>
 </template>
 
 <script>
+  import NewTodo from './components/NewTodo'
   export default {
+    components: {
+      NewTodo
+    },
     data: () => ({
-      drawer: true
+      drawer: true,
+      dialog: false
     }),
     props: {
       source: String

@@ -56,6 +56,7 @@ export default {
       ],
       tasks: [],
       taskId: '',
+      message: '',
       theIndex: ''
     }
   },
@@ -70,7 +71,8 @@ export default {
     },
     deleteTask: function () {
       axios.delete('/api/tasks/' + this.taskId).then(response => {
-        this.taskId = response.data.message
+        this.message = response.data.message
+        this.getTasks()
       })
     },
     completeTask: function () {
@@ -81,7 +83,8 @@ export default {
           status: 'completed'
         }
       }).then(response => {
-        this.taskId.$set = response.data.message
+        this.message = response.data.message
+        this.getTasks()
       })
     },
     logger: function () {
