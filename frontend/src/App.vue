@@ -47,7 +47,9 @@
             justify-center
           >
             <router-view></router-view>
-              <new-todo :dialog="dialog"></new-todo>
+              <new-todo 
+              :dialog="dialog"
+              @newTodoClose="newTodoClose"></new-todo>
           </v-layout>
         </v-container>
       </v-content>
@@ -70,6 +72,11 @@
     }),
     props: {
       source: String
+    },
+    methods: {
+      newTodoClose: function (dialog) {
+        this.dialog = false
+      }
     }
   }
 </script>

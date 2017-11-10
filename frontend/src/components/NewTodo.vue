@@ -6,15 +6,15 @@
           <v-form v-model="valid" class="pr-2 pl-2">
             <v-text-field
               label="Title"
-              v-model="name"
-              :rules="nameRules"
+              v-model="title"
+              :rules="titleRules"
               :counter="10"
               required
             ></v-text-field>
             <v-text-field
               label="Description"
-              v-model="email"
-              :rules="emailRules"
+              v-model="description"
+              :rules="descriptionRules"
               required
             ></v-text-field>
           </v-form>
@@ -33,12 +33,21 @@
     props: ['dialog'],
     data () {
       return {
-        dialog: false
+        valid: false,
+        title: '',
+        titleRules: [
+          (v) => !!v || 'Title is required',
+          (v) => v.length <= 10 || 'Title must be less than 10 characters'
+        ],
+        description: '',
+        descriptionRules: [
+          (v) => !!v || 'E-mail is required'
+        ]
       }
     },
     methods: {
       modal: function () {
-        this.$emit('dialog')
+        this.$emit('newTodoClose', this.dialog)
       }
     }
   }
