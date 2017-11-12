@@ -29,7 +29,6 @@ import axios from 'axios'
 
 export default {
   name: 'home',
-  props: ['tasks'],
   data () {
     return {
       tasks: this.$router.params,
@@ -55,6 +54,7 @@ export default {
         {
           text: 'Status',
           value: 'status',
+          sortable: false,
           align: 'left'
         }
       ],

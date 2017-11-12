@@ -21,7 +21,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="green darken-1" flat="flat" @click.native="dialog = !dialog; modal()">Cancel</v-btn>
-          <v-btn color="green darken-1" flat="flat" @click.native="dialog = !dialog; modal()">Sumbit</v-btn>
+          <v-btn color="green darken-1" flat="flat" @click.native="dialog = !dialog; submitTodo()">Sumbit</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -29,6 +29,7 @@
 </template>
 
 <script>
+  import axios from 'axios'
   export default {
     props: ['dialog'],
     data () {
@@ -37,17 +38,31 @@
         title: '',
         titleRules: [
           (v) => !!v || 'Title is required',
-          (v) => v.length <= 10 || 'Title must be less than 10 characters'
+          (v) => v.length >= 10 || 'Title must be at least 10 characters'
         ],
         description: '',
         descriptionRules: [
-          (v) => !!v || 'E-mail is required'
-        ]
+          (v) => !!v || 'Description is required'
+        ],
+        message: ''
       }
     },
     methods: {
       modal: function () {
         this.$emit('newTodoClose', this.dialog)
+      },
+      submitTodo: function () {
+        axios({
+          method: 'post',
+          url: '/api/tasks/',
+          data: {
+            title: this.title,
+            description: this.description
+          }
+        }).then(response => {
+          this.message = response.data.task
+          this.modal
+        })
       }
     }
   }

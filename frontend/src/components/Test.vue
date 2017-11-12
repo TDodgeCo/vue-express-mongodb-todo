@@ -19,7 +19,7 @@
         @click="taskId = props.item._id; deleteTask()"
         >delete</v-icon>
       </td>
-      <td class="text-xs-left">{{ props.item.status[0] }}</td>
+      <td class="text-xs-left">{{ props.tasks.status[0] }}</td>
     </template>
   </v-data-table>
 </template>
@@ -55,6 +55,7 @@ export default {
         {
           text: 'Status',
           value: 'status',
+          sortable: false,
           align: 'left'
         }
       ],
@@ -63,7 +64,15 @@ export default {
       theIndex: ''
     }
   },
+  // mounted () {
+  //   this.getTasks()
+  // },
   methods: {
+    // getTasks: function () {
+    //   axios.get('/api/tasks').then(response => {
+    //     this.tasks = response.data
+    //   })
+    // },
     deleteTask: function () {
       axios.delete('/api/tasks/' + this.taskId).then(response => {
         this.message = response.data.message
